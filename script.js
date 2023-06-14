@@ -2,8 +2,12 @@ let display = document.getElementById('display');
 let currentInput = '';
 
 function appendCharacter(character) {
-    currentInput += character;
-    display.value = currentInput;
+    if (character === '%') {
+        handlePercentage();
+    } else {
+        currentInput += character;
+        display.value = currentInput;
+    }
 }
 
 function deleteLastCharacter() {
@@ -19,7 +23,7 @@ function calculateResult() {
             throw new Error('Operação inválida');
         }
         display.value = result;
-        currentInput = '';
+        currentInput = String(result);
     } catch (error) {
         display.value = 'Erro';
         console.error(error);
@@ -29,4 +33,19 @@ function calculateResult() {
 function clearDisplay() {
     currentInput = '';
     display.value = '';
+}
+
+function handlePercentage() {
+    try {
+        const value = eval(currentInput);
+        if (isNaN(value) || !isFinite(value)) {
+            throw new Error('Operação inválida');
+        }
+        const result = value / 100;
+        display.value = result;
+        currentInput = String(result);
+    } catch (error) {
+        display.value = 'Erro';
+        console.error(error);
+    }
 }
